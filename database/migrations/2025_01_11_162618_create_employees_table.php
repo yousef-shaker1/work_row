@@ -27,8 +27,8 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->date('hire_date');
             $table->string('job_title');
-            $table->foreignId('departments_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('branches_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('status', EmploymentStatusEnum::toArray())->default(EmploymentStatusEnum::ACTIVE);
             $table->enum('employement_type', EmploymentTypeEnum::toArray())->nullable();
             $table->decimal('salary', 10, 2)->nullable();

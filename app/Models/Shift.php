@@ -13,4 +13,7 @@ class Shift extends Model
     {
         return $this->belongsTo(Company::class);
     }
+    protected $casts = [
+        'work_days' => 'array',
+    ];
 }

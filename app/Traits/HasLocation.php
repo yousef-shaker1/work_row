@@ -19,10 +19,10 @@ trait HasLocation
         return $this->belongsTo(Governorate::class);
     }
 
-    protected function locationString(): Attribute
-    {
-        return new Attribute(
-            get: fn() => getLocationString($this->country, $this->governorate),
-        );
-    }
+    // protected function locationString(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn() => getLocationString($this->country, $this->governorate),
+    //     );
+    // }
 }
