@@ -35,7 +35,7 @@ class EmployeeResource extends Resource
     {
         return $form
             ->schema([
-                Tabs::make('Employee Details') // اسم المجموعة
+                Tabs::make('Employee Details')
                     ->tabs([
                         Tabs\Tab::make('Basic Info')
                             ->schema([
@@ -57,12 +57,8 @@ class EmployeeResource extends Resource
                                     ->inline()
                                     ->columnSpanFull(),
 
-                                // Toggle::make('is_admin')
-                                // ->inline()
-                                // ->required(),
-                            ])
-                            ->columns(3),
-                            Tabs\Tab::make('Employment Info')
+                        ])->columns(3),
+                        Tabs\Tab::make('Employment Info')
                             ->schema([
                                 Forms\Components\TextInput::make('job_title')
                                     ->required(),
@@ -77,7 +73,6 @@ class EmployeeResource extends Resource
                                     ->relationship(
                                         name: 'branch',
                                         titleAttribute: 'name',
-                                        // modifyQueryUsing: fn(Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
                                     )
                                     ->searchable()
                                     ->preload(),
@@ -85,7 +80,6 @@ class EmployeeResource extends Resource
                                     ->relationship(
                                         name: 'department',
                                         titleAttribute: 'name',
-                                        // modifyQueryUsing: fn(Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
                                     )
                                     ->searchable()
                                     ->preload(),
@@ -98,12 +92,12 @@ class EmployeeResource extends Resource
                                 Forms\Components\ToggleButtons::make('employement_type')
                                     ->options(EmploymentTypeEnum::class)
                                     ->inline()
+                                    ->default(EmploymentTypeEnum::FULL_TIME)
                                     ->columnSpanFull(),
 
-                            ])
-                            ->columns(2),
+                        ])->columns(2),
 
-                            Tabs\Tab::make('Residency')
+                        Tabs\Tab::make('Residency')
                             ->schema([
                                 Forms\Components\Group::make([
                                     Forms\Components\Fieldset::make('Civil ID')
@@ -113,8 +107,6 @@ class EmployeeResource extends Resource
                                                 ->maxLength(255),
                                             Forms\Components\FileUpload::make('civil_id_expiration')
                                                 ->label('Civil ID expiration')
-                                            // SpatieMediaLibraryFileUpload::make('civil_id_image')
-                                                // ->collection('civil-ids')
                                                 ->image()
                                                 ->imageEditor()
                                                 ->downloadable()
@@ -126,12 +118,10 @@ class EmployeeResource extends Resource
                                             Forms\Components\TextInput::make('passport_number')
                                                 ->maxLength(255),
                                             Forms\Components\FileUpload::make('passport_expiration')
-                                            // Forms\Components\SpatieMediaLibraryFileUpload::make('passport_image')
-                                                // ->collection('passports')
                                                 ->image()
                                                 ->imageEditor()
-                                                ->downloadable()
-                                                ->openable()
+                                                // ->downloadable()
+                                                // ->openable()
                                                 ->columnSpanFull(),
                                         ]),
                                     Forms\Components\Fieldset::make('Iqama')
@@ -139,8 +129,6 @@ class EmployeeResource extends Resource
                                             Forms\Components\TextInput::make('iqama_number')
                                                 ->maxLength(255),
                                             Forms\Components\FileUpload::make('iqama_expiration')
-                                            // Forms\Components\SpatieMediaLibraryFileUpload::make('iqama_image')
-                                                // ->collection('iqamas')
                                                 ->image()
                                                 ->imageEditor()
                                                 ->downloadable()
@@ -157,7 +145,7 @@ class EmployeeResource extends Resource
                                     )
                                     ->columns(3),
                             ]),
-                            Tabs\Tab::make('Contact & Address')
+                        Tabs\Tab::make('Contact & Address')
                             ->schema([
                                 Forms\Components\Group::make([
                                     Forms\Components\TextInput::make('work_email')
@@ -168,32 +156,33 @@ class EmployeeResource extends Resource
                                 ])
                                     ->columns(2),
 
-                                    Forms\Components\Fieldset::make('address')
+                                Forms\Components\Fieldset::make('address')
                                     ->schema([
                                         Forms\Components\Select::make('country_id')
-                                        ->relationship(name: 'country', titleAttribute: 'name')
-                                        ->searchable()
-                                        ->preload()
-                                        ->live()
-                                        ->afterStateUpdated(function (Forms\Set $set) {
-                                            $set('governorate_id', null);
-                                        }),
-                
+                                            ->relationship(name: 'country', titleAttribute: 'name')
+                                            ->searchable()
+                                            ->preload()
+                                            ->live()
+                                            ->afterStateUpdated(function (Forms\Set $set) {
+                                                $set('governorate_id', null);
+                                            }),
+
                                         Forms\Components\Select::make('governorate_id')
-                                        ->relationship(
-                                            name: 'governorate',
-                                            titleAttribute: 'name',
-                                            modifyQueryUsing: fn(Builder $query, Forms\Get $get) => $query->where('country_id', $get('country_id')),
+                                            ->relationship(
+                                                name: 'governorate',
+                                                titleAttribute: 'name',
+                                                modifyQueryUsing: fn(Builder $query, Forms\Get $get) => $query->where('country_id', $get('country_id')),
                                             )
-                                        ->preload()
-                                        ->searchable(),
+                                            ->preload()
+                                            ->searchable(),
                                         Forms\Components\Textarea::make('address')
-                                        ->label('Address')
-                                        ->columnSpanFull(),
+                                            ->label('Address')
+                                            ->columnSpanFull(),
                                     ])
                                     ->columns(2),
                             ]),
-                        Tab::make('Login Info') // التبويب الثالث
+
+                        Tab::make('Login Info')
                             ->schema([
                                 Forms\Components\TextInput::make('email')
                                     ->email()
@@ -206,7 +195,7 @@ class EmployeeResource extends Resource
                                     ->maxLength(255),
                             ]),
 
-                            Tabs\Tab::make('Education')
+                        Tabs\Tab::make('Education')
                             ->schema([
                                 Forms\Components\Repeater::make('education')
                                     ->hiddenLabel()
@@ -231,7 +220,7 @@ class EmployeeResource extends Resource
                                     ->reorderable()
                             ]),
 
-                            Tabs\Tab::make('Experience')
+                        Tabs\Tab::make('Experience')
                             ->schema([
                                 Forms\Components\Repeater::make('experience')
                                     ->hiddenLabel()
@@ -294,28 +283,7 @@ class EmployeeResource extends Resource
                                     ->reorderable()
                             ]),
 
-                        // Tabs\Tab::make('Resignation')
-                        //     ->schema([
-                        //         Forms\Components\Repeater::make('resignation')
-                        //             ->hiddenLabel()
-                        //             ->relationship('resignation')
-                        //             ->schema([
-                        //                 Forms\Components\DatePicker::make('resignation_date')
-                        //                     ->required(),
-                        //                 Forms\Components\DatePicker::make('last_working_day'),
-                        //                 Forms\Components\ToggleButtons::make('status')
-                        //                     ->options(ResignationStatusEnum::class)
-                        //                     ->inline(),
-                        //                 Forms\Components\MarkdownEditor::make('reason')
-                        //                     ->columnSpanFull(),
-                        //                 Forms\Components\MarkdownEditor::make('notes')
-                        //                     ->columnSpanFull(),
-                        //             ])
-                        //             ->columns(2)
-                        //             ->defaultItems(0)
-                        //             ->collapsible()
-                        //             ->reorderable()
-                        //     ]),
+
                     ])
                     ->columnSpanFull()
 
@@ -338,20 +306,10 @@ class EmployeeResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('country.name')
                     ->label('country')
-                    // ->StateUsing(fn($record) => $record->country->name . ', ' . $record->governorate->name)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('governorate.name')
                     ->label('governorate')
-                    // ->StateUsing(fn($record) => $record->country->name . ', ' . $record->governorate->name)
                     ->sortable(),
-                    
-
-                // Tables\Columns\TextColumn::make('location')
-                //     ->sortable()
-                //     ->label('Location')
-                //     ->GetStateUsing(function ($record) {
-                //         return $record->country->name . ',' . $record->governorate->name;
-                //     }),
 
                 Tables\Columns\TextColumn::make('gender')
                     ->searchable()
@@ -380,15 +338,15 @@ class EmployeeResource extends Resource
             ])
             ->filters([
                 // Tables\Actions\EditAction::make(),
-                ])
-                ->actions([
-                    Tables\Actions\Action::make('View Log')
-                        ->icon('heroicon-m-clipboard-document-list')
-                        ->color('secondary')
-                        ->url(fn(Employee $record): string => static::getUrl('view-log', parameters: [
-                            'record' => $record,
-                        ])),
-                    Tables\Actions\EditAction::make(),
+            ])
+            ->actions([
+                Tables\Actions\Action::make('View Log')
+                    ->icon('heroicon-m-clipboard-document-list')
+                    ->color('secondary')
+                    ->url(fn(Employee $record): string => static::getUrl('view-log', parameters: [
+                        'record' => $record,
+                    ])),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
